@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Завдання020-2</title>
+</head>
+
+<body>
+
+    <form id="posrForm">
+        <label for="titleInput">Title:</label>
+        <input type="text" id="titleInput" name="title"><br><br>
+        <label for="bodyInput">Body:</label>
+        <input type="text" id="bodyInput" name="body"><br><br>
+
+        <input type="submit" value="Оновити">
+    </form>
+    <script>
+        /*
+        Завдання:
+        Напишіть сценарій, який оновлюватиме сутність post з властивостями
+        id: 1,
+        title: 'foo',
+        body: 'bar',
+        userId: 1,
+
+        Створіть форму з полем введення для значення властивості title та полем введення для значення властивості body.
+
+        Значення для властивостей title та body отримайте від користувача.
+        Значення id та userId мають дорівнювати 1. Виводити їх у формі не потрібно.
+        Під час завантаження сценарію заповніть форму даними, які були отримані під час обробки GET-запиту на https://jsonplaceholder.typicode.com/posts/1.
+
+        Адреса для надсилання запиту
+        https://jsonplaceholder.typicode.com/posts/1.
+
+        Для оновлення сутності скористайтесь PUT-запитом https://jsonplaceholder.typicode.com/posts/1. Опрацюйте відповідь
+        і виведіть інформацію про помилку або успішно завершену операцію.
+        */
+
+        const form = document.querySelector("#posrForm");
+        const titleInput = document.querySelector("#titleInput");
+        const bodyInput = document.querySelector("#bodyInput");
+
+        fetch("https://jsonplaceholder.typicode.com/posts/1")
+            .then(response => response.json())
+            .then(data => {
+                titleInput.value = data.title;
+                bodyInput.value = data.body;
+            })
+            .catch(error => console.error(error));
+
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            const data = {
+                id: 1,
+                title: titleInput.value,
+                body: bodyInput.value,
+                userId: 1,
+            };
+
+            fetch("https://jsonplaceholder.typicode.com/posts/1", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        });
+    </script>
+</body>
+
+</html>
